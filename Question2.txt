@@ -1,0 +1,54 @@
+CSV File Question:
+
+Question1 : How will you tackle the challenge above?
+
+Answer:
+
+CSV is short for Comma-Separated-Values. We know that CSV files can be easily created using BufferedReader like:
+	BufferedReader buff = new BufferedReader(new FileReader("csv.file"));
+
+Using the BufferedReader object, we can read the data using readLine() object like:
+	String expression = buff.readLine();
+
+After reading the data the next step is to turn in into a String[] array, so it can later be operated upon, using the split function.
+	String[] arr = expression.split(",").trim();
+	if the array length is zero, an exception will be thrown saying InvalidInput.
+
+A map is required so we can perform the store the data in the form of key-value pairs, by running a loop over it and using the split method.
+
+	Map<String, String> map = new LinkedHashMap<>();
+	for(String s: arr) {
+		String[] a = s.split(":").trim();
+		String cell = a[0];
+		String value = a[1];
+		map.put(cell, value);
+	}
+
+After putting the values in this map, I will be creating another map which will contain the final result. To achieve that, I will run a loop through the map created above using the entry set to get a collections view of it. I will, then be evaluation the the values for each particular cell. Firstly I will check if it is a number by making another function checkNum like this which will return a boolean value, it will go something like: 
+
+	Map<String, Integer> finalMap = new LinkedHashMap<>();
+	for(Map.Entry<String, String> entry : map.entrySet()) {
+		String cell = entry.getKey();
+		String value = entry.getValue();
+		if(checkNum(value)) {
+			finalMap.put(cell, Integer.parseInt(value));
+		}
+	}
+	public static checkNum(String num) {
+		return Pattern.Matches("^[0-9]+$", num);
+	}
+
+
+Next up, I know that since it is not a number, it is going to be an expression which can be checked using the right regex. In a similar fashion I need to ensure that the value of the cell is the valid value. After checking all of this, if it happens to be a valid expression in place of the value, then I will simply evaluate the expression and put the values in the final map.
+
+Q2: What type of errors you would you check for?
+
+Answer:
+
+There are many errors and exceptions that need to be considered while writing the code for this. Firstly, we need to ensure that there is No NumberFormatException. We need to check if the cells entered, the numerical values and the expressions entered, if not, then a custom exception needs to be thrown. While reading the data also we need to steer clear of the potential errors and exceptions.
+
+Q3: How might a user break your code?
+
+Answer: 
+
+The user can break this code by making unwanted and unnecessary changes in the CSV file. If the user changes the input format, in that case also this code will break. Another thing to be considered is, if the user enters a value greater than the maximum value and integer can hold, then the data stored won't be meaningful and the code will be considered as broken.
